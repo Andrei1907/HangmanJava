@@ -50,7 +50,6 @@ public class Game {
     }
 
     public String verifyLetter(String letter) {
-        //false = s-a terminat jocul, true altfel
         int pos = word.indexOf(letter);
         if(pos == -1) {
             errorCount += 1;

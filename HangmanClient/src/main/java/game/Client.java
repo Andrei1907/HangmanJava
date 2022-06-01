@@ -17,19 +17,37 @@ public class Client {
                 Socket clientSocket = new Socket(serverAddress, PORT);
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader (
-                        new InputStreamReader(clientSocket.getInputStream())) ) {
+                        new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            new LoginFrame().setVisible(true);
+
             boolean ok = true;
-            System.out.println("Am inceput");
-            out.println("eu");
-            System.out.println("Am trimis numele eu");
+            String username = br.readLine();
+            out.println(username);
+
+            String verification = in.readLine();
+            while(verification.equals("ErrorUser")) {
+                System.out.println("Login:");
+                username = br.readLine();
+                out.println(username);
+                verification = in.readLine();
+                System.out.println("Am trimis numele " + username);
+            }
+
+            //ecran intermediar
+            if(verification.equals("ErrorServer")) {
+                System.out.println("Eroare la server");
+                clientSocket.close();
+                return;
+            } else {
+                out.println("Start");
+            }
 
             while (ok) {
-                System.out.println("Am intrat in while");
                 String word = in.readLine();
                 System.out.println("Am primit " + word);
 
                 while(true) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     String request = br.readLine();
                     out.println(request);
                     System.out.println("Am primit " + request + ", trimis la server");
@@ -44,16 +62,22 @@ public class Client {
 
                     if(result.get(0).equals("Won")) {
                         System.out.println("bravo");
-                        out.println("no");
-                        clientSocket.close();
-                        ok = false;
+                        request = br.readLine();
+                        out.println(request);
+                        if(request.equals("no")) {
+                            clientSocket.close();
+                            ok = false;
+                        }
                         break;
                     } else
                     if(result.get(0).equals("Lost")) {
                         System.out.println("urit");
-                        out.println("no");
-                        clientSocket.close();
-                        ok = false;
+                        request = br.readLine();
+                        out.println(request);
+                        if(request.equals("no")) {
+                            clientSocket.close();
+                            ok = false;
+                        }
                         break;
                     }
                     else System.out.println(result.get(1) + " " + result.get(2));
