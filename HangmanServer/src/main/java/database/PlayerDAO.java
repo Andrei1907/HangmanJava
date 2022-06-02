@@ -1,6 +1,9 @@
 package database;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class PlayerDAO {
     public void create(String name) throws SQLException {
@@ -47,5 +50,19 @@ public class PlayerDAO {
             pstmt.setInt(2, id);
             pstmt.executeUpdate();
         }
+    }
+
+    public Map<String, Integer> getTopPlayers(int k) throws SQLException {
+        Connection con = Database.getConnection();
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(
+                     "SELECT name, highscore FROM hangman.users ORDER BY highscore DESC LIMIT " + k)) {
+            Map<String, Integer> map = new TreeMap<>();
+            while(rs.next()) {
+                map.put(rs.getString(1), rs.getInt(2));
+            }
+            return map;
+        }
+
     }
 }

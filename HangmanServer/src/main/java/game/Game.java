@@ -50,6 +50,10 @@ public class Game {
     }
 
     public String verifyLetter(String letter) {
+        if(guessedWord.indexOf(letter) >= 0) {
+            return "Guessed";
+        }
+
         int pos = word.indexOf(letter);
         if(pos == -1) {
             errorCount += 1;

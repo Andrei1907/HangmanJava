@@ -34,7 +34,7 @@ public class Dictionary {
     }
 
     public boolean verify(String str) {
-        if(str.length() < 5 && str.length() > 10)
+        if(str.length() < 5 || str.length() > 10)
             return false;
         if(str.contains("\'"))
             return false;
